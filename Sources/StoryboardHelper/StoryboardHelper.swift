@@ -30,9 +30,9 @@ final public class Storyboard: NSObject {
     /**
      *  Load storyboard fIle names
      */
-    private static func checkBoardList() {
+    private static func checkBoardList<T: UIViewController>(_ from: T.Type) {
         if Storyboard.shared.boards.isEmpty {
-            let filesEnumerator = FileManager.default.enumerator(atPath: Storyboard.bundle.bundlePath)!
+            let filesEnumerator = FileManager.default.enumerator(atPath: Bundle(for: T.self).bundlePath)!
             while let file = filesEnumerator.nextObject() as? String {
                 if let name = Storyboard.getStorybaordName(file), !Storyboard.shared.excludeBoards.contains(name) {
                     Storyboard.shared.boards.insert(name)
@@ -74,10 +74,10 @@ final public class Storyboard: NSObject {
      */
     @MainActor
     public static func controller<T: UIViewController>(_ from: T.Type, creator: ((NSCoder) -> T?)? = nil) throws -> T {
-        Storyboard.checkBoardList()
+        Storyboard.checkBoardList(from)
         let name = String(describing: from)
         for sotyrboardName in Storyboard.shared.boards {
-            let storyboard = UIStoryboard(name: sotyrboardName, bundle: bundle)
+            let storyboard = UIStoryboard(name: sotyrboardName, bundle: Bundle(for: T.self))
             if let availableIdentifiers = storyboard.value(forKey: "identifierToNibNameMap") as? [String: String], availableIdentifiers[name] != nil {
                 if let creator {
                     return storyboard.instantiateViewController(identifier: name, creator: creator)
@@ -113,10 +113,10 @@ final public class Storyboard: NSObject {
      */
     @MainActor
     public static func instance<T: UIViewController>(_ from: T.Type, creator: ((NSCoder) -> T?)? = nil) -> T {
-        Storyboard.checkBoardList()
+        Storyboard.checkBoardList(from)
         let name = String(describing: from)
         for sotyrboardName in Storyboard.shared.boards {
-            let storyboard = UIStoryboard(name: sotyrboardName, bundle: bundle)
+            let storyboard = UIStoryboard(name: sotyrboardName, bundle: Bundle(for: T.self))
             if let availableIdentifiers = storyboard.value(forKey: "identifierToNibNameMap") as? [String: String], availableIdentifiers[name] != nil {
                 if let creator {
                     return storyboard.instantiateViewController(identifier: name, creator: creator)
