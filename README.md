@@ -13,8 +13,8 @@ let testVC = storyboard2.instantiateViewController(withIdentifier: "TestViewCont
 
 After:
 ```
-try await Storyboard().controller(MainViewController.self)
-try await Storyboard().controller(TestViewController.self)
+let mainVC = try Storyboard.controller(MainViewController.self)
+let testVC = Storyboard.instance(TestViewController.self)
 ```
 
 - You can instantiate objects using only their storyboard IDs, regardless of storyboard parsing.
@@ -32,7 +32,7 @@ import PackageDescription
 let package = Package(
     name: "YOUR_PROJECT_NAME",
     dependencies: [
-        .package(url: "https://github.com/manaes/StoryboardHelper.git", from: "1.0.0"),
+        .package(url: "https://github.com/manaes/StoryboardHelper.git", from: "1.0.2"),
     ]
 )
 ```
@@ -52,14 +52,14 @@ import StoryboardHelper
 #### Code
 
 ```
-let testVC = StoryboardUtil().controller(from: TestViewController.self)  
+let testVC = Storyboard.instance(TestViewController.self)  
 testVC.value = 1
 ```
 
 or
 
 ```
-let testViewModelVC = try Storyboard().controller(TestViewModelController.self) { coder in
+let testViewModelVC = try Storyboard.controller(TestViewModelController.self) { coder in
   TestViewModelController(
     viewModel: TestViewModel(),
     coder: coder
