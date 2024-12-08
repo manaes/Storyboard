@@ -3,6 +3,7 @@ import Testing
 
 @Test func testLoadSuccess() async throws {
     #expect(try await Storyboard.controller(TestViewController.self) != nil)
+    #expect(await Storyboard.instance(TestViewController.self) != nil)
 }
 
 @Test func testLoadCreatorSuccess() async throws {
@@ -16,6 +17,18 @@ import Testing
             }
             #expect(vc != nil)
         }
+    }
+}
+
+@Test func testLoadInstanceCreatorSuccess() async throws {
+    Task { @MainActor in
+        let vc = Storyboard.instance(TestViewModelController.self) { coder in
+            TestViewModelController(
+                viewModel: TestViewModel(),
+                coder: coder
+            )
+        }
+        #expect(vc != nil)
     }
 }
 
