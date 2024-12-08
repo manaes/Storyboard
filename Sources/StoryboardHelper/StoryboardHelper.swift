@@ -19,13 +19,6 @@ final public class Storyboard: NSObject {
     private let excludeBoards = ["LaunchScreen"]
     /// Loaded storyboad name list
     private var boards: Set<String> = []
-    /// Bundle path
-    private static var bundle: Bundle =
-    if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
-        Bundle.module
-    } else {
-        Bundle.main
-    }
     
     /**
      *  Load storyboard fIle names
